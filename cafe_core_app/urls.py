@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from . import views
 # from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, Top10ActiveUsers
 
@@ -22,7 +22,8 @@ urlpatterns = [
     # Топ 10 наиболее активных пользователей по кликам на блюда
     path('meals/stat/top10active', views.Top10ActiveUsers.as_view()),
     # Топ N пользователей по N категории
-    path('meals/stat/topcustom/<int:pk>/<str>', views.MealsAdminOnlyActionsAPIView.as_view()),
+    # path('meals/stat/<int:limit>/<int:category>', views.TopCustomCategoryAPIView.as_view()),
+    re_path(r"^meals/stat/cust/(?P<limit>\d+)/(?P<category>\d+)", views.TopCustomCategoryAPIView.as_view()),
     # Для каждого блюда отдельную страничку со статистикой переходов на него (для графика)
-
+    path('meals/stat/cust', views.TopCustomCategoryAPIView.as_view()),
     ]

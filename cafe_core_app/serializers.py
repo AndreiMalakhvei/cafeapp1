@@ -25,4 +25,6 @@ class UserClickSerializer(ClickSerializer):
     name = serializers.CharField(source='user__username')
     id = serializers.IntegerField(source='user_id')
 
-
+class CustomClickSerializer(ClickSerializer):
+    name = serializers.CharField(source='user__username')
+    id = serializers.IntegerField(source='user_id')

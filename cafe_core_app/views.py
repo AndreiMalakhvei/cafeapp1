@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 
 from .models import Meals, MealClick, MealImage
-from .serializers import MealsSerializer, MealClickSerializer, UserClickSerializer
+from .serializers import MealsSerializer, MealClickSerializer, UserClickSerializer, CustomClickSerializer
 
 
 class MealsListAPIView(generics.ListAPIView):
@@ -54,3 +54,22 @@ class Top10ActiveUsers(generics.ListAPIView):
                                                                                      'total').order_by('-total')[:10]
     serializer_class = UserClickSerializer
     permission_classes = (AllowAny,)
+
+
+class TopCustomCategoryAPIView(generics.ListAPIView):
+
+    serializer_class = CustomClickSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        try:
+            limit = int(self.request.query_params.get('limit'))
+            category = int(self.request.query_params.get('category'))
+        except ValueError:
+            pass
+        else:
+        # x = Meals.objects.filter(meal_type_id=category)
+            queryset = MealClick.objects.filter(meal__meal_type=category).values('user').annotate(total=Count('user')).values('user_id',
+                                                                    'user__username', 'total').order_by('-total')[:limit]
+
+        return queryset

@@ -3,20 +3,19 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
 
+class MealType(models.Model):
+    category = models.CharField('Категория блюда', max_length=100)
+
+    def __str__(self):
+        return self.category
+
 
 class Meals(models.Model):
     name = models.CharField('Название блюда', max_length=100)
     description = models.TextField('Описание блюда')
     price = models.FloatField('Стоимость блюда')
     size = models.IntegerField('Вес в граммах')
-
-    class MealTypes(models.TextChoices):
-        HOT_MEALS = 'Горячие блюда',
-        DRINKS = 'Напитки',
-        DESSERTS = 'Десерты',
-        NO_TYPE = 'No Type'
-
-    meal_type = models.CharField(max_length=30, choices=MealTypes.choices, default=MealTypes.NO_TYPE)
+    meal_type = models.ForeignKey(MealType, default='4', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
