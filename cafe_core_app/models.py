@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
 
+
 class MealType(models.Model):
     category = models.CharField('Категория блюда', max_length=100)
 
@@ -15,7 +16,7 @@ class Meals(models.Model):
     description = models.TextField('Описание блюда')
     price = models.FloatField('Стоимость блюда')
     size = models.IntegerField('Вес в граммах')
-    meal_type = models.ForeignKey(MealType, default='4', on_delete=models.CASCADE)
+    meal_type = models.ForeignKey(MealType, default='4', on_delete=models.CASCADE, related_name='meal_category')
 
     def __str__(self):
         return self.name
@@ -28,6 +29,9 @@ class MealClick(models.Model):
 
 
 class MealImage(models.Model):
-    meal = models.ForeignKey(Meals, on_delete=models.CASCADE)
+    meal = models.ForeignKey(Meals, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='admin_uploaded_images/')
     date = models.DateTimeField(blank=True)
+
+    def __str__(self):
+        return self.image.url

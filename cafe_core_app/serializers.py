@@ -1,11 +1,28 @@
 from rest_framework import serializers
-from .models import Meals, MealClick
+from .models import Meals, MealClick, MealType
+from django.contrib.auth.models import User
 
 
-class MealsSerializer(serializers.ModelSerializer):
+class MealTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MealType
+        fields = "__all__"
+
+
+
+class MealsListSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Meals
         fields = "__all__"
+
+class AllMealsListSerializer(MealsListSerializer):
+    meal_category = serializers.CharField(source='meal_type.category')
+
+
+class MealBrowseSerializer(MealsListSerializer):
+    images = serializers.StringRelatedField(many=True)
 
 
 class ClickSerializer(serializers.ModelSerializer):
@@ -24,6 +41,7 @@ class MealClickSerializer(ClickSerializer):
 class UserClickSerializer(ClickSerializer):
     name = serializers.CharField(source='user__username')
     id = serializers.IntegerField(source='user_id')
+
 
 class CustomClickSerializer(ClickSerializer):
     name = serializers.CharField(source='user__username')
