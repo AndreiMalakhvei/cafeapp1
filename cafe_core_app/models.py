@@ -31,7 +31,8 @@ class MealClick(models.Model):
 class MealImage(models.Model):
     meal = models.ForeignKey(Meals, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='admin_uploaded_images/')
-    date = models.DateTimeField(blank=True)
+    date = models.DateTimeField('Дата добавления', blank=True, default=timezone.now)
+    ismain = models.BooleanField('Заглавное фото', default=False)
 
     def __str__(self):
         return self.image.url

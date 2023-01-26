@@ -1,5 +1,9 @@
+import rest_framework.fields
+from django.core.exceptions import ObjectDoesNotExist
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
-from .models import Meals, MealClick, MealType
+from .models import Meals, MealClick, MealType, MealImage
 from django.contrib.auth.models import User
 
 
@@ -10,19 +14,57 @@ class MealTypeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class MealTypeCreateMealSerializer(serializers.Serializer):
+    category_select = MealTypeSerializer(many=True, read_only=True)
 
-class MealsListSerializer(serializers.ModelSerializer):
+
+
+
+
+
+
+
+class ImagesSerializer(serializers.ModelSerializer):
+    url = serializers.ImageField(source='image')
+
+    class Meta:
+        model = MealImage
+        fields = ['id', 'url']
+
+
+class MealsBaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meals
+        fields = '__all__'
+
+
+class MealsListSerializer(MealsBaseSerializer):
+    image_url = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = Meals
-        fields = "__all__"
+        exclude = ['description']
+
+    @extend_schema_field(rest_framework.fields.URLField)
+    def get_image_url(self, obj):
+        try:
+            img = obj.images.get(meal=obj.id, ismain=True)
+            img_val = img.image.url
+        except ObjectDoesNotExist:
+            img_val = f'No image defined as main for meal {obj.name} '
+        return img_val
+
 
 class AllMealsListSerializer(MealsListSerializer):
-    meal_category = serializers.CharField(source='meal_type.category')
+    meal_category = serializers.CharField(source='meal_type.category',required=False, read_only=True)
 
 
-class MealBrowseSerializer(MealsListSerializer):
-    images = serializers.StringRelatedField(many=True)
+class MealBrowseSerializer(AllMealsListSerializer):
+    images = ImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Meals
+        fields = ['id', 'name', 'meal_category', 'description', 'images', 'price', 'size', 'meal_type' ]
 
 
 class ClickSerializer(serializers.ModelSerializer):
@@ -46,3 +88,33 @@ class UserClickSerializer(ClickSerializer):
 class CustomClickSerializer(ClickSerializer):
     name = serializers.CharField(source='user__username')
     id = serializers.IntegerField(source='user_id')
+
+
+# class UserRegisterSerializer(serializers.ModelSerializer):
+#     email = serializers.EmailField(required=True)
+#
+#     class Meta:
+#         model = User
+#         fields = ['username', 'first_name', 'last_name', 'email', 'password']
+#
+#
+#     def create(self, validated_data):
+#         user = User(
+#             email=validated_data['email'],
+#             username=validated_data['username'],
+#             first_name=validated_data.get('first_name', None),
+#             last_name=validated_data.get('last_name', None)
+#         )
+#         user.set_password(validated_data['password'])
+#         user.save()
+#         return user
+
+
+
+class ImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MealImage
+        fields = ['meal', 'image']
+
+
+

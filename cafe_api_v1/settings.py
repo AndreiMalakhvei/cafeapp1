@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cafe_core_app.apps.CafeCoreAppConfig',
     'rest_framework',
-    'drf_yasg',
+    # 'drf_yasg',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -144,5 +145,15 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'CAFE Project API',
+    'DESCRIPTION': 'Study DRF Project',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # 'COMPONENT_SPLIT_REQUEST': True
+    # OTHER SETTINGS
 }
