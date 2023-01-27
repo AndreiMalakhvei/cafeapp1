@@ -1,29 +1,28 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse, OpenApiParameter, OpenApiExample, \
-    inline_serializer, PolymorphicProxySerializer
-from rest_framework import generics, mixins, serializers, status
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse, OpenApiParameter
+from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework.response import Response
-
 from .models import Meals, MealClick, MealImage, MealType
 from .serializers import MealsListSerializer, MealClickSerializer, UserClickSerializer, CustomClickSerializer, \
     MealBrowseSerializer, MealTypeSerializer, MealsBaseSerializer, ImageUploadSerializer, \
     MealTypeCreateMealSerializer
 from .exceptions import BadRequest
+from .permissions import IsAdminOrReadOnly
+
 
 @extend_schema_view(get=extend_schema(summary="Получение списка категорий блюд"))
 class MenuAPIView(generics.ListAPIView):
     queryset = MealType.objects.all()
     serializer_class = MealTypeSerializer
-
+    permission_classes = [AllowAny, ]
 
 
 @extend_schema_view(
-get=extend_schema(
+    get=extend_schema(
     summary="Получение списка блюд заданной категории",
     responses={
             200: MealsListSerializer,
@@ -33,6 +32,7 @@ get=extend_schema(
 )
 class MealsListAPIView(generics.ListAPIView):
     serializer_class = MealsListSerializer
+    permission_classes = [AllowAny, ]
 
     def get_queryset(self):
         if self.kwargs.get('pk', 0):
@@ -44,14 +44,14 @@ class MealsListAPIView(generics.ListAPIView):
 
 
 @extend_schema_view(
-get=extend_schema(
+    get=extend_schema(
     summary="Получение списка всех блюд",
     responses={200: MealsListSerializer,}
     )
 )
 class AllMealsListAPIView(MealsListAPIView):
-    """Получение списка всех блюд"""
     serializer_class = MealsListSerializer
+    permission_classes = [AllowAny, ]
 
 
 @extend_schema_view(
@@ -62,13 +62,14 @@ class AllMealsListAPIView(MealsListAPIView):
 class MealsRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Meals.objects.all()
     serializer_class = MealBrowseSerializer
+    permission_classes = [IsAdminOrReadOnly, ]
 
     @extend_schema(summary="Получение детализированной записи о блюде",
                    responses={200: MealBrowseSerializer,
                               404: OpenApiResponse(description='Meal not found')}
                    )
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.method == 'GET':
+        if request.user.is_authenticated:
             meal_id = self.kwargs['pk']
             try:
                 meal = Meals.objects.get(id=meal_id)
@@ -83,11 +84,11 @@ class MealsRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
         return self.retrieve(request, *args, **kwargs)
 
 
-
 @extend_schema_view(post=extend_schema(summary="Cоздание новой записи о блюде"))
 class AddMealAPIView(generics.CreateAPIView):
     queryset = Meals.objects.all()
     serializer_class = MealsBaseSerializer
+    permission_classes = [IsAdminUser, ]
 
     @extend_schema(
         summary="Получение необходимых данных для создания новой записи о блюде",
@@ -107,6 +108,7 @@ class Top3MealsAPIView(generics.ListAPIView):
     serializer_class = MealClickSerializer
     permission_classes = (AllowAny,)
 
+
 @extend_schema_view(get=extend_schema(summary="Получение списка Top10 пользователей по кликам"))
 class Top10ActiveUsersAPIView(generics.ListAPIView):
     queryset = MealClick.objects.values('user').annotate(total=Count('user')).values('user_id', 'user__username',
@@ -117,7 +119,7 @@ class Top10ActiveUsersAPIView(generics.ListAPIView):
 
 class TopCustomCategoryAPIView(generics.ListAPIView):
     serializer_class = CustomClickSerializer
-
+    permission_classes = [AllowAny, ]
 
     @extend_schema(
         summary="Получение списка TopN пользователей по X категории блюд",
@@ -127,7 +129,6 @@ class TopCustomCategoryAPIView(generics.ListAPIView):
         ],
         responses={200: CustomClickSerializer,
                    200: MealTypeCreateMealSerializer,
-                   
                    404: OpenApiResponse(description='Limit or Category parameter is invalid')}
     )
     def get(self, request, *args, **kwargs):
@@ -154,17 +155,9 @@ class TopCustomCategoryAPIView(generics.ListAPIView):
         return MealClick.objects.none()
 
 
-# class UserRegisterAPIView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserRegisterSerializer
-
-
-
+@extend_schema_view(post=extend_schema(summary="Загрузка фотографии блюда"))
 class ImageUploadAPIView(generics.CreateAPIView):
     queryset = MealImage.objects.all()
     serializer_class = ImageUploadSerializer
-
-
-
-
-
+    # parser_classes = [FileUploadParser]
+    permission_classes = [IsAuthenticated, ]

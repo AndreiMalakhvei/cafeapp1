@@ -1,9 +1,11 @@
 from rest_framework import permissions
+from rest_framework.permissions import SAFE_METHODS
 
-class ReadAnyMarkClicks(permissions.BasePermission):
+class IsAdminOrReadOnly(permissions.BasePermission):
+
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            # if request.user.is_authenticated:
-            #     print('Cought authentificated user')
-
-            return True
+        return bool(
+            request.method in SAFE_METHODS or
+            request.user and
+            request.user.is_staff
+        )

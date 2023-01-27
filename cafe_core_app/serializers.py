@@ -18,12 +18,6 @@ class MealTypeCreateMealSerializer(serializers.Serializer):
     category_select = MealTypeSerializer(many=True, read_only=True)
 
 
-
-
-
-
-
-
 class ImagesSerializer(serializers.ModelSerializer):
     url = serializers.ImageField(source='image')
 
@@ -90,31 +84,7 @@ class CustomClickSerializer(ClickSerializer):
     id = serializers.IntegerField(source='user_id')
 
 
-# class UserRegisterSerializer(serializers.ModelSerializer):
-#     email = serializers.EmailField(required=True)
-#
-#     class Meta:
-#         model = User
-#         fields = ['username', 'first_name', 'last_name', 'email', 'password']
-#
-#
-#     def create(self, validated_data):
-#         user = User(
-#             email=validated_data['email'],
-#             username=validated_data['username'],
-#             first_name=validated_data.get('first_name', None),
-#             last_name=validated_data.get('last_name', None)
-#         )
-#         user.set_password(validated_data['password'])
-#         user.save()
-#         return user
-
-
-
 class ImageUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = MealImage
         fields = ['meal', 'image']
-
-
-

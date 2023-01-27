@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
+from django.dispatch import receiver
+from django.db.models.signals import pre_delete
+from django.core.files.storage import default_storage
 
 
 class MealType(models.Model):
@@ -36,3 +39,9 @@ class MealImage(models.Model):
 
     def __str__(self):
         return self.image.url
+
+
+@receiver(pre_delete, sender=MealImage)
+def decrement_category_usage(sender, instance, **kwargs):
+    name = instance.image.name
+    default_storage.delete(name)
