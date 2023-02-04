@@ -219,4 +219,12 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     # 'COMPONENT_SPLIT_REQUEST': True
     # OTHER SETTINGS
+    "SWAGGER_UI_SETTINGS": {
+            "deepLinking": True,
+            "persistAuthorization": True,
+            "displayOperationId": True,
+            },
+    # 'ENABLE_LIST_MECHANICS_ON_NON_2XX': True,
+    'APPEND_PATHS': {},
+    'APPEND_COMPONENTS': {},
 }

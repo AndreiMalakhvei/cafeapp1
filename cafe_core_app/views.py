@@ -3,6 +3,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse, OpenApiParameter
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -159,5 +160,5 @@ class TopCustomCategoryAPIView(generics.ListAPIView):
 class ImageUploadAPIView(generics.CreateAPIView):
     queryset = MealImage.objects.all()
     serializer_class = ImageUploadSerializer
-    # parser_classes = [FileUploadParser]
+    parser_classes = [MultiPartParser,]
     permission_classes = [IsAuthenticated, ]

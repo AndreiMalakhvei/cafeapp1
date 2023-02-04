@@ -14,7 +14,7 @@ urlpatterns = [
     # Добавление нового блюда в меню (GET, POST)
     path('meals/add', views.AddMealAPIView.as_view()),
     #загрузка нового фото блюда (POST)
-    path('meals/upload', views.ImageUploadAPIView.as_view()),
+    path('meals/photoupload', views.ImageUploadAPIView.as_view()),
     # Топ 3 блюд по кликам на них авторизованными пользователями (GET)
     path('stat/top3clicked', views.Top3MealsAPIView.as_view()),
     # Топ 10 наиболее активных пользователей по кликам на блюда (GET)
