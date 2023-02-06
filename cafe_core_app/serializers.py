@@ -11,7 +11,7 @@ class MealTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MealType
-        fields = "__all__"
+        fields = ["id", 'category']
 
 
 class MealTypeCreateMealSerializer(serializers.Serializer):

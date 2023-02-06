@@ -30,8 +30,9 @@ SECRET_KEY = 'django-insecure-=4v)_q9o=gsmd)wyx#zw3kzv2k5404m%kr0bp$k%zls)*4lhwa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 # Application definition
 
@@ -47,11 +48,15 @@ INSTALLED_APPS = [
     # 'drf_yasg',
     'drf_spectacular',
     'djoser',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -157,9 +162,9 @@ REST_FRAMEWORK = {
             'rest_framework.authentication.SessionAuthentication',
 
     ),
-    'PAGE_SIZE': 10,
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework_json_api.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10,
+    # 'DEFAULT_PAGINATION_CLASS':
+    #     'rest_framework_json_api.pagination.PageNumberPagination',
 }
 
 
