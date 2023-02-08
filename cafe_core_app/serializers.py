@@ -13,6 +13,12 @@ class MealTypeSerializer(serializers.ModelSerializer):
         model = MealType
         fields = ["id", 'category']
 
+class MealTypeSelectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MealType
+        fields = ["id", 'category']
+
 
 class MealTypeCreateMealSerializer(serializers.Serializer):
     category_select = MealTypeSerializer(many=True, read_only=True)
@@ -37,7 +43,7 @@ class MealsListSerializer(MealsBaseSerializer):
 
     class Meta:
         model = Meals
-        exclude = ['description']
+        fields = '__all__'
 
     @extend_schema_field(rest_framework.fields.URLField)
     def get_image_url(self, obj):

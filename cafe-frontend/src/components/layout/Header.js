@@ -37,7 +37,7 @@ const Header = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to='/menu' >
+            <NavLink to='/adminpage' >
               Тайная комната Админа
             </NavLink>
           </li>

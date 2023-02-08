@@ -14,7 +14,6 @@ const MealItemDescription= (props) => {
        setDescription(props.meal)
     }, [props.meal.id]);
 
-    console.log(description.images)
 
     return (<div>
         <ul>

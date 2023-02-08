@@ -5,12 +5,16 @@ import MealsList from "./pages/MealsList";
 import MealDetails from "./pages/MealDetails";
 import Layout from "./components/layout/Layout";
 import Stat from "./pages/Stat";
+import React from "react";
+import AdminPage from "./pages/AdminPage";
+import FeaturePage from "./pages/FeaturePage";
 
 
 function App() {
     return (
         <Layout>
             <Switch>
+                <React.Fragment>
                 <div>
                     <Route path='/' exact>
                         <Redirect to='/home'/>
@@ -30,7 +34,14 @@ function App() {
                     <Route path='/stat'>
                         <Stat/>
                     </Route>
+                    <Route path='/adminpage'>
+                        <AdminPage/>
+                    </Route>
+                    <Route path='/features'>
+                        <FeaturePage/>
+                    </Route>
                 </div>
+                </React.Fragment>
             </Switch>
         </Layout>
     );

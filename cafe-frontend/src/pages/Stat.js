@@ -1,23 +1,39 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import StatDisplay from "../components/StatDisplay";
+import CustomStatDisplay from "../components/CustomStatDisplay";
+
 
 
 const Stat= () => {
+    let isEffected = true
     const [activeList, setActiveList] = useState([])
     useEffect( () =>{
        axios
         .get(`http://127.0.0.1:8000/api/v1/stat/top10active`)
-        .then(response => {setActiveList(response.data)})
+        .then(response => {
+                if (isEffected) {
+                    setActiveList(response.data)}
+                });
+       return () => {isEffected = false};
     }, []);
+
 
     const [clickedList, setClickedList] = useState([])
     useEffect( () =>{
        axios
-        .get(`http://127.0.0.1:8000/api/v1/stat/top10active`)
-        .then(response => {setClickedList(response.data)})
+        .get(`http://127.0.0.1:8000/api/v1/stat/top3clicked`)
+        .then(response => {
+                if (isEffected) {
+                    setClickedList(response.data)}
+                });
+       return () => {isEffected = false};
     }, []);
 
+    const selectChangeHandler = event => {
+        console.log(event.target.value)
+
+    }
 
 
     return (<div>
@@ -30,7 +46,7 @@ const Stat= () => {
         </div>
         <div>
 
-            <StatDisplay title='Top3 Clicked Meals' content={clickedList}/>
+            <CustomStatDisplay />
 
         </div>
     </div>);

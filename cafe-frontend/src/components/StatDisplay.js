@@ -16,7 +16,7 @@ const StatDisplay= (props) => {
                 </tr>
                 </thead>
                 <tbody>
-                    {content.map(record => <Record key={content.id} recontent={record} />)}
+                    {content.map(record => <Record recontent={record} key={content.id} />)}
                 </tbody>
             </table>
         </div>

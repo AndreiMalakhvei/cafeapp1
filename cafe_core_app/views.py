@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from .models import Meals, MealClick, MealImage, MealType
 from .serializers import MealsListSerializer, MealClickSerializer, UserClickSerializer, CustomClickSerializer, \
     MealBrowseSerializer, MealTypeSerializer, MealsBaseSerializer, ImageUploadSerializer, \
-    MealTypeCreateMealSerializer
+    MealTypeCreateMealSerializer, AllMealsListSerializer
 from .exceptions import BadRequest
 from .permissions import IsAdminOrReadOnly
 
@@ -51,7 +51,7 @@ class MealsListAPIView(generics.ListAPIView):
     )
 )
 class AllMealsListAPIView(MealsListAPIView):
-    serializer_class = MealsListSerializer
+    serializer_class = AllMealsListSerializer
     permission_classes = [AllowAny, ]
 
 
@@ -63,7 +63,8 @@ class AllMealsListAPIView(MealsListAPIView):
 class MealsRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Meals.objects.all()
     serializer_class = MealBrowseSerializer
-    permission_classes = [IsAdminOrReadOnly, ]
+    permission_classes = [AllowAny, ]
+    # permission_classes = [IsAdminOrReadOnly, ]
 
     @extend_schema(summary="Получение детализированной записи о блюде",
                    responses={200: MealBrowseSerializer,
@@ -89,7 +90,7 @@ class MealsRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
 class AddMealAPIView(generics.CreateAPIView):
     queryset = Meals.objects.all()
     serializer_class = MealsBaseSerializer
-    permission_classes = [IsAdminUser, ]
+    # permission_classes = [IsAdminUser, ]
 
     @extend_schema(
         summary="Получение необходимых данных для создания новой записи о блюде",
@@ -135,9 +136,10 @@ class TopCustomCategoryAPIView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         if not request.query_params:
             queryset = MealType.objects.all()
-            users_count = User.objects.filter(is_superuser=False).count()
-            return Response({'category_select': MealTypeSerializer(queryset, many=True).data,
-                             'max_number_users': users_count})
+            # users_count = User.objects.filter(is_superuser=False).count()
+            # return Response({'category_select': MealTypeSerializer(queryset, many=True).data,
+            #                  'max_number_users': users_count})
+            return Response(MealTypeSerializer(queryset, many=True).data)
         return self.list(request, *args, **kwargs)
 
     def get_queryset(self):
