@@ -1,15 +1,19 @@
 import StatDisplay from "../components/StatDisplay";
 import Record from "../components/Record";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
+import SearchResultsWindow from "./SearchResultWindow";
 
 
 
 const FeaturePage= () => {
+    const [show, setShow] = useState(false)
     let isEffected = true
     const [list, setList] = useState([])
     const [sortedField, setSortedField] = React.useState("id");
     let trig = "id"
+
+    const searchText = useRef()
 
     useEffect( () =>{
        axios
@@ -37,10 +41,21 @@ const FeaturePage= () => {
         return 0;
      });
 
+    const [search, setSearch] = React.useState('');
 
+    const handleSearch = () => {
+        setSearch(searchText.current.value);
+        setShow(true)
+    };
+
+  const filteredRecords = list.filter((record) => {
+    return record.name.toLowerCase().includes(search.toLowerCase());
+  });
 
 
     return (<div>
+        <SearchResultsWindow onClose={()=> setShow(false)} show={show} list={filteredRecords}/>
+
         <div>
             <label>SORT BY</label>
         <select name="category" onChange={handleSort}>
@@ -50,6 +65,14 @@ const FeaturePage= () => {
             <option key="4" value="price"> price </option>
             <option key="5" value="size"> size </option>
         </select>
+        </div>
+
+        <div>
+            <input type="text" id="text" ref={searchText}/>
+            <button type="button" onClick={handleSearch}>
+                Search
+            </button>
+
         </div>
 
 

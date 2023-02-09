@@ -45,7 +45,7 @@ const AdminPage= () => {
     return (<div>
         <div>
             <Link to='/features' >
-              New account
+              Features
             </Link>
         </div>
         <form onSubmit={submitFormHandler}>
