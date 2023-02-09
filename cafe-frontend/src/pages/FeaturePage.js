@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, useMemo} from "react";
 import axios from "axios";
 import SearchResultsWindow from "./SearchResultWindow";
 import AllMealsTable from "../components/AllMealsTable";
@@ -21,6 +21,22 @@ const FeaturePage = () => {
 
     const sortOrder = useRef()
     const sortField = useRef()
+
+     //to implement UseMemo on proce filter field
+    const [mn, setMn] = useState(1)
+    const [mx, setMx] = useState(100000000)
+
+    const filtered = useMemo(
+        () =>
+            list.filter((record) => {
+                console.log("filtering...")
+                return record.price >= parseInt(mn) && record.price <= parseInt(mx);
+            }), [mx, mn]);
+
+    useEffect(() => {
+        setList(filtered)
+    }, [filtered]);
+//end of useMemo inplementation
 
     useEffect(() => {
         axios
@@ -63,20 +79,34 @@ const FeaturePage = () => {
         }
     };
 
-    const filteredRecords = list.filter((record) => {
+    const filteredRecords = useMemo(
+        () =>
+        list.filter((record) => {
         return record.name.toLowerCase().includes(search.toLowerCase()) || record.description.toLowerCase().includes(search.toLowerCase());
-    });
+    }), [search]
+    );
 
     const filterByPriceHandler = (event) => {
         event.preventDefault()
         if (minPrice.current.value && maxPrice.current.value) {
-
-            const filtered = list.filter((record) => {
-                return record.price >= parseInt(minPrice.current.value) && record.price <= parseInt(maxPrice.current.value);
-            });
-            setList(filtered)
+            setMn(minPrice.current.value)
+            setMx(maxPrice.current.value)
         }
     }
+
+//before UseMemo implementation
+    //   const filterByPriceHandler = (event) => {
+    //     event.preventDefault()
+    //     if (minPrice.current.value && maxPrice.current.value) {
+    //
+    //         const filtered = list.filter((record) => {
+    //             console.log("filtering...")
+    //             return record.price >= parseInt(minPrice.current.value) && record.price <= parseInt(maxPrice.current.value);
+    //         });
+    //         setList(filtered)
+    //     }
+    // }
+
 
     const setDefault = (event) => {
         maxPrice.current.value = ""
