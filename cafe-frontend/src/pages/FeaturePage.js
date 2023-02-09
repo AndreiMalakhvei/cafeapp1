@@ -1,70 +1,112 @@
-import StatDisplay from "../components/StatDisplay";
-import Record from "../components/Record";
 import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import SearchResultsWindow from "./SearchResultWindow";
+import AllMealsTable from "../components/AllMealsTable";
 
 
-
-const FeaturePage= () => {
+const FeaturePage = () => {
     const [show, setShow] = useState(false)
     let isEffected = true
     const [list, setList] = useState([])
     const [sortedField, setSortedField] = React.useState("id");
+    const [sortedOrder, setSortedOrder] = React.useState("ascending");
     let trig = "id"
+    const [fetchedList, setFetchedList] = useState([])
+
+
+    const minPrice = useRef()
+    const maxPrice = useRef()
 
     const searchText = useRef()
 
-    useEffect( () =>{
-       axios
-        .get(`http://127.0.0.1:8000/api/v1/meals`)
-        .then(response => {
+    const sortOrder = useRef()
+    const sortField = useRef()
+
+    useEffect(() => {
+        axios
+            .get(`http://127.0.0.1:8000/api/v1/meals`)
+            .then(response => {
                 if (isEffected) {
-                    setList(response.data.sort((a, b) => a[trig] - b[trig]))}
-                });
-       return () => {isEffected = false};
+                    setList(response.data.sort((a, b) => a[trig] - b[trig]))
+                }
+                setFetchedList(response.data.sort((a, b) => a[trig] - b[trig]))
+            });
+        return () => {
+            isEffected = false
+        };
     }, []);
 
+
     const handleSort = (event) => {
-        setSortedField(event.target.value)
-        trig = event.target.value
+        setSortedField(sortField.current.value)
+        setSortedOrder(sortOrder.current.value)
+        // trig = event.target.value
     }
 
 
     list.sort((a, b) => {
         if (a[sortedField] < b[sortedField]) {
-            return -1;
+            return sortedOrder === 'ascending' ? -1 : 1;
         }
         if (a[sortedField] > b[sortedField]) {
-            return 1;
+            return sortedOrder === 'ascending' ? 1: -1;
         }
         return 0;
-     });
+    });
 
     const [search, setSearch] = React.useState('');
 
     const handleSearch = () => {
-        setSearch(searchText.current.value);
-        setShow(true)
+        if (searchText.current.value) {
+            setSearch(searchText.current.value);
+            setShow(true)
+        }
     };
 
-  const filteredRecords = list.filter((record) => {
-    return record.name.toLowerCase().includes(search.toLowerCase());
-  });
+    const filteredRecords = list.filter((record) => {
+        return record.name.toLowerCase().includes(search.toLowerCase()) || record.description.toLowerCase().includes(search.toLowerCase());
+    });
+
+    const filterByPriceHandler = (event) => {
+        event.preventDefault()
+        if (minPrice.current.value && maxPrice.current.value) {
+
+            const filtered = list.filter((record) => {
+                return record.price >= parseInt(minPrice.current.value) && record.price <= parseInt(maxPrice.current.value);
+            });
+            setList(filtered)
+        }
+    }
+
+    const setDefault = (event) => {
+        maxPrice.current.value = ""
+        minPrice.current.value = ""
+        searchText.current.value = ""
+        sortOrder.current.value = "ascending"
+        sortField.current.value = "id"
+        setSortedField("id")
+        setSortedOrder("ascending")
+
+        setList(fetchedList)
+    }
 
 
     return (<div>
-        <SearchResultsWindow onClose={()=> setShow(false)} show={show} list={filteredRecords}/>
+        <SearchResultsWindow onClose={() => setShow(false)} show={show} list={filteredRecords}/>
 
         <div>
             <label>SORT BY</label>
-        <select name="category" onChange={handleSort}>
-            <option key="1" value="id"> id </option>
-            <option key="2" value="name"> name </option>
-            <option key="3" value="meal_category"> meal category </option>
-            <option key="4" value="price"> price </option>
-            <option key="5" value="size"> size </option>
-        </select>
+            <select name="category" onChange={handleSort} ref={sortField}>
+                <option key="1" value="id"> id</option>
+                <option key="2" value="name"> name</option>
+                <option key="3" value="meal_category"> meal category</option>
+                <option key="4" value="price"> price</option>
+                <option key="5" value="size"> size</option>
+            </select>
+            <select name="category" onChange={handleSort} ref={sortOrder}>
+                <option key="1" value="ascending"> ASCENDING</option>
+                <option key="2" value="descending"> DESCENDING</option>
+            </select>
         </div>
 
         <div>
@@ -72,44 +114,27 @@ const FeaturePage= () => {
             <button type="button" onClick={handleSearch}>
                 Search
             </button>
+        </div>
 
+        <div>
+            <form onSubmit={filterByPriceHandler}>
+                <label htmlFor="min">Цена от: </label>
+                <input type="number" id="min" ref={minPrice}/>
+                <label htmlFor="max">до: </label>
+                <input type="number" id="max" ref={maxPrice}/>
+                <button type="submit">FILTER BY PRICE</button>
+            </form>
+            <button onClick={setDefault}>DEFAULT</button>
         </div>
 
 
-        <table className="table" style={{width: "80%"}}>
-
-                <thead>
-                <tr>
-                    <th scope="colId">id</th>
-                    <th scope="colTitle">Наименование</th>
-                    <th scope="colType">Тип</th>
-                    <th scope="colDesc">Описание</th>
-                    <th scope="colPrice">Цена</th>
-                    <th scope="colSize">Вес</th>
-                </tr>
-                </thead>
-                <tbody>
-                {list.map(record =>
-                    <tr>
-                        <td>{record.id}</td>
-                        <td>{record.name}</td>
-                        <td>{record.meal_category}</td>
-                        <td>{record.description}</td>
-                        <td>{record.price}</td>
-                        <td>{record.size}</td>
-                    </tr>)}
-                </tbody>
-            </table>
+        <div>
+            <AllMealsTable list={list}/>
+        </div>
 
 
     </div>);
 }
-
-
-
-
-
-
 
 
 export default FeaturePage
