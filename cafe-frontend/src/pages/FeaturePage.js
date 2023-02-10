@@ -134,8 +134,8 @@ const FeaturePage = () => {
                 <option key="5" value="size"> size</option>
             </select>
             <select name="category" onChange={handleSort} ref={sortOrder}>
-                <option key="1" value="ascending"> ASCENDING</option>
-                <option key="2" value="descending"> DESCENDING</option>
+                <option key="5" value="ascending"> ASCENDING</option>
+                <option key="6" value="descending"> DESCENDING</option>
             </select>
         </div>
 

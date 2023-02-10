@@ -80,7 +80,7 @@ const AdminPage= () => {
             <button type="submit" >Добавить блюдо</button>
 
 
-            />
+
 
 
         </form>

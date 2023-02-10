@@ -40,6 +40,8 @@ urlpatterns = [
     path('stat/top10active', views.Top10ActiveUsersAPIView.as_view()),
     # Топ N пользователей по X категории (GET, GET+params)
     path('stat/cust', views.TopCustomCategoryAPIView.as_view()),
+    # график
+    path('stat/chart', views.ChartAPIView.as_view()),
     ]
 # DRF-SPECTACULAR
 urlpatterns += [

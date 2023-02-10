@@ -38,6 +38,13 @@ class MealsBaseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ChartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meals
+        fields = ['id', 'name']
+
+
+
 class MealsListSerializer(MealsBaseSerializer):
     image_url = serializers.SerializerMethodField(required=False)
 

@@ -27,7 +27,7 @@ const SelectUse = (props) => {
   // }
 
     return (<div>
-        <label>Country</label>
+        <label>Category</label>
         <select name="category" onChange={handleCategory} >
             <option>--Select Category--</option>
             {

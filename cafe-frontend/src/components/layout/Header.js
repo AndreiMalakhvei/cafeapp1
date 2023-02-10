@@ -32,7 +32,7 @@ const Header = () => {
 
           { user?
               (<li>
-            <Link onClick={logoutUser}> Logout </Link>
+            <Link to="/#" onClick={logoutUser} > Logout </Link>
           </li>) :
             (<li>
             <NavLink to='/login'> Login </NavLink>

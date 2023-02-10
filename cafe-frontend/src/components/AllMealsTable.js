@@ -18,7 +18,7 @@ const AllMealsTable= (props) => {
             </thead>
             <tbody>
             {props.list.map(record =>
-                <tr>
+                <tr key={record.id}>
                     <td>{record.id}</td>
                     <td>{record.name}</td>
                     <td>{record.meal_category}</td>

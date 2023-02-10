@@ -14,7 +14,7 @@ export const AuthProvider = ({children}) => {
         ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [user, setUser] = useState(()=> localStorage.getItem('authTokens')
         ? jwt_decode(localStorage.getItem('authTokens')) : null)
-    let [loading, setLoading] = useState(true)
+    let [loading, setLoading] = useState(false)
 
     const history = useHistory()
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({children}) => {
 
     const updateToken = async() => {
         console.log("Token updated")
-        axios.post("http://127.0.0.1:8000/api/v1/api/token/refresh",
+        axios.post("http://127.0.0.1:8000/api/v1/api/token/refresh/",
             {"refresh": authTokens?.refresh},
             // {headers: {"Content-Type": "application/json"}}
         )
@@ -56,13 +56,12 @@ export const AuthProvider = ({children}) => {
                     setAuthTokens(data)
                     setUser(jwt_decode(data.access))
                     localStorage.setItem('authTokens', JSON.stringify(data))
-                    history.push('/')
                 } else{
                      logoutUser()
                 }
             })
         if(loading){
-            setLoading(false)
+            setLoading(true)
         }
     }
 
@@ -70,12 +69,12 @@ export const AuthProvider = ({children}) => {
         if(loading){
             updateToken()
         }
-        let fourMinutes = 1000 * 60 * 5
+        let fiveMinutes = 1000 * 60 * 5
         let interval =  setInterval(()=> {
             if(authTokens){
                 updateToken()
             }
-        }, fourMinutes)
+        }, fiveMinutes)
         return ()=> clearInterval(interval)
     }, [authTokens, loading])
 

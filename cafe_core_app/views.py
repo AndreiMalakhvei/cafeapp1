@@ -1,4 +1,6 @@
+
 from django.db.models import Count
+from django.utils import timezone
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse, OpenApiParameter
 from rest_framework import generics
@@ -7,10 +9,13 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .chart_population import ReturnChartDict
 from .models import Meals, MealClick, MealImage, MealType
 from .serializers import MealsListSerializer, MealClickSerializer, UserClickSerializer, CustomClickSerializer, \
     MealBrowseSerializer, MealTypeSerializer, MealsBaseSerializer, ImageUploadSerializer, \
-    MealTypeCreateMealSerializer, AllMealsListSerializer
+    MealTypeCreateMealSerializer, AllMealsListSerializer, ChartSerializer
 from .exceptions import BadRequest
 from .permissions import IsAdminOrReadOnly
 
@@ -107,7 +112,7 @@ class Top3MealsAPIView(generics.ListAPIView):
     queryset = MealClick.objects.values('meal').annotate(total=Count('meal')).values('meal_id', 'meal__name',
                                                                                      'total').order_by('-total')[:3]
     serializer_class = MealClickSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
 
 @extend_schema_view(get=extend_schema(summary="Получение списка Top10 пользователей по кликам"))
@@ -115,12 +120,12 @@ class Top10ActiveUsersAPIView(generics.ListAPIView):
     queryset = MealClick.objects.values('user').annotate(total=Count('user')).values('user_id', 'user__username',
                                                                                      'total').order_by('-total')[:10]
     serializer_class = UserClickSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
 
 class TopCustomCategoryAPIView(generics.ListAPIView):
     serializer_class = CustomClickSerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     @extend_schema(
         summary="Получение списка TopN пользователей по X категории блюд",
@@ -163,3 +168,29 @@ class ImageUploadAPIView(generics.CreateAPIView):
     serializer_class = ImageUploadSerializer
     parser_classes = [MultiPartParser,]
     permission_classes = [IsAuthenticated, ]
+
+
+class ChartAPIView(APIView):
+    serializer_class = CustomClickSerializer
+    permission_classes = [AllowAny, ]
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        if not request.query_params:
+            queryset = Meals.objects.all().order_by('name')
+            return Response(ChartSerializer(queryset, many=True).data)
+
+        else:
+            try:
+                mid = int(request.query_params.get('id'))
+                interval = request.query_params.get('interval')
+                qty = int(request.query_params.get('qty'))
+            except (ValueError, TypeError):
+                raise BadRequest(detail='Invalid parameters provided')
+            else:
+                inst = ReturnChartDict(mid, qty, interval)
+                chart_data = inst.get_chart_dict()
+                return Response(chart_data)
+
+    def get_queryset(self):
+        return MealClick.objects.none()

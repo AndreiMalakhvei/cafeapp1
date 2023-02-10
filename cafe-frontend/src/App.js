@@ -9,6 +9,7 @@ import React from "react";
 import AdminPage from "./pages/AdminPage";
 import FeaturePage from "./pages/FeaturePage";
 import LogInPage from "./pages/LogInPage";
+import ChartPage from "./pages/ChartPage";
 
 
 
@@ -29,6 +30,7 @@ function App() {
                     <Route component={AdminPage}  path='/adminpage'/>
                     <Route component={FeaturePage}  path='/features'/>
                     <Route component={LogInPage} path='/login'/>
+                    <Route component={ChartPage} path='/chart'/>
                 </div>
                 </React.Fragment>
             </Switch>

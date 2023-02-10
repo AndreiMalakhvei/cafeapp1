@@ -20,11 +20,11 @@ def generate_clicks():
     if len(users_ids) == 0 or len(users_ids) == 0:
         raise ValueError('Tables User and/or Meals are not populated')
 
-    for _ in range(1000):
+    for _ in range(2000):
         new_obj = MealClick(
             meal=meals_qs.get(id=random.choice(meals_ids)),
             user=users_qs.get(id=random.choice(users_ids)),
-            click_date=now - timedelta(days=random.randrange(1000))
+            click_date=now - timedelta(days=random.randrange(42))
             )
         prepared_instances_list.append(new_obj)
 

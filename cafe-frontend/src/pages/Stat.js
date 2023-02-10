@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import StatDisplay from "../components/StatDisplay";
 import CustomStatDisplay from "../components/CustomStatDisplay";
+import {Link} from "react-router-dom";
 
 
 
@@ -38,6 +39,7 @@ const Stat= () => {
 
     return (<div>
         <p>This is Stat page</p>
+        <Link to={'/chart/'}> CHART </Link>
         <div>
             <StatDisplay title='Top10 Active Users' content={activeList}/>
         </div>
