@@ -22,13 +22,13 @@ const SelectUse = (props) => {
     props.onSelectedItem(getCategoryObj)
   }
 
-  const handleInput = (event) => {
-        console.log(event.target.innerHtml)
-  }
+  // const handleInput = (event) => {
+  //       console.log(event.target.innerHtml)
+  // }
 
     return (<div>
         <label>Country</label>
-        <select name="category" onChange={handleCategory} onInput={handleInput}>
+        <select name="category" onChange={handleCategory} >
             <option>--Select Category--</option>
             {
                 categories.map((cat) => (

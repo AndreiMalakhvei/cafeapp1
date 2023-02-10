@@ -8,6 +8,8 @@ import Stat from "./pages/Stat";
 import React from "react";
 import AdminPage from "./pages/AdminPage";
 import FeaturePage from "./pages/FeaturePage";
+import LogInPage from "./pages/LogInPage";
+
 
 
 function App() {
@@ -19,27 +21,14 @@ function App() {
                     <Route path='/' exact>
                         <Redirect to='/home'/>
                     </Route>
-                    <Route path='/home'>
-                        <Home/>
-                    </Route>
-                    <Route path='/menu' exact>
-                        <Menu/>
-                    </Route>
-                    <Route path='/menu/:typeId'>
-                        <MealsList/>
-                    </Route>
-                    <Route path='/meals/:mealId'>
-                        <MealDetails/>
-                    </Route>
-                    <Route path='/stat'>
-                        <Stat/>
-                    </Route>
-                    <Route path='/adminpage'>
-                        <AdminPage/>
-                    </Route>
-                    <Route path='/features'>
-                        <FeaturePage/>
-                    </Route>
+                    <Route component={Home} path='/home/' />
+                    <Route component={Menu} path='/menu' exact />
+                    <Route component={MealsList} path='/menu/:typeId'/>
+                    <Route component={MealDetails} path='/meals/:mealId'/>
+                    <Route component={Stat} path='/stat'/>
+                    <Route component={AdminPage}  path='/adminpage'/>
+                    <Route component={FeaturePage}  path='/features'/>
+                    <Route component={LogInPage} path='/login'/>
                 </div>
                 </React.Fragment>
             </Switch>

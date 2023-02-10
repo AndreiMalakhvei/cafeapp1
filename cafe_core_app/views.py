@@ -63,8 +63,7 @@ class AllMealsListAPIView(MealsListAPIView):
 class MealsRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Meals.objects.all()
     serializer_class = MealBrowseSerializer
-    permission_classes = [AllowAny, ]
-    # permission_classes = [IsAdminOrReadOnly, ]
+    permission_classes = [IsAdminOrReadOnly, ]
 
     @extend_schema(summary="Получение детализированной записи о блюде",
                    responses={200: MealBrowseSerializer,
@@ -90,7 +89,7 @@ class MealsRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
 class AddMealAPIView(generics.CreateAPIView):
     queryset = Meals.objects.all()
     serializer_class = MealsBaseSerializer
-    # permission_classes = [IsAdminUser, ]
+    permission_classes = [IsAdminUser, ]
 
     @extend_schema(
         summary="Получение необходимых данных для создания новой записи о блюде",

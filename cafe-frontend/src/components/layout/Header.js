@@ -1,9 +1,13 @@
-import { NavLink } from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
+import {useContext} from "react";
+import ContextStorage from "../../context/contextStorage";
 
 
 const Header = () => {
+  let {user, logoutUser} = useContext(ContextStorage)
   return (
     <header >
+      {user && <h2>Welcome to our Restaurant, {user.username}!</h2>}
       <nav >
         <ul>
           <li>
@@ -16,31 +20,28 @@ const Header = () => {
               Меню
             </NavLink>
           </li>
-          <li>
-            <NavLink to='/stat' >
+
+
+          { user &&
+            <li>
+            <NavLink to='/stat'>
               Статистика
             </NavLink>
-          </li>
-          <li>
-            <NavLink to='/menu' >
-              Login
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/menu' >
-              Logout
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/menu' >
-              New account
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/adminpage' >
-              Тайная комната Админа
-            </NavLink>
-          </li>
+          </li>}
+
+
+          { user?
+              (<li>
+            <Link onClick={logoutUser}> Logout </Link>
+          </li>) :
+            (<li>
+            <NavLink to='/login'> Login </NavLink>
+            </li>)}
+
+
+          { user && user.username === 'admin'&& <li><NavLink to='/adminpage'>Тайная комната Админа</NavLink></li>}
+
+
         </ul>
       </nav>
     </header>
