@@ -1,12 +1,15 @@
 import Record from "./Record";
+import {useContext} from "react";
+import ContextStorage from "../context/contextStorage";
 
 const StatDisplay= (props) => {
+
     const title = props.title
     const content = props.content
 
     return (
         <div>
-            <h3>{title}</h3>
+            <h1>{title}</h1>
             <table className="table" style={{width: "80%"}}>
                 <thead>
                 <tr>

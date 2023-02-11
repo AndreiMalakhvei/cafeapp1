@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
+import ContextStorage from "../context/contextStorage";
 
 const SelectUse = (props) => {
+    let {authTokens} = useContext(ContextStorage)
     const [categories, setCategories]= useState([]);
     // const [categoryObj, setCategoryObj]= useState('');
 
     useEffect( ()=>{
         const getCategory = async ()=>{
-        const req= await axios.get("http://127.0.0.1:8000/api/v1/stat/cust");
+        const req= await axios.get("http://127.0.0.1:8000/api/v1/stat/cust",
+        {headers: {"Authorization": `JWT ${authTokens?.access}`}}
+        );
         const getRes= await req.data;
         setCategories(await getRes);
 

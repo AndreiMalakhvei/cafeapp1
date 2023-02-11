@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import SelectUse from "./SelectUse";
 import StatDisplay from "./StatDisplay";
+import ContextStorage from "../context/contextStorage";
 
 const CustomStatDisplay= () => {
+
     const [customList, setCustomList] = useState([])
     const [categoryId, setCategoryId] = useState(1)
     const [usersNumber, setUsersNumber] = useState(3)
@@ -19,11 +21,18 @@ const CustomStatDisplay= () => {
         let isEffected = true
     }
 
-    let isEffected = true
 
+
+    let isEffected = true
+    let {authTokens} = useContext(ContextStorage)
     useEffect( () =>{
        axios
-        .get("http://127.0.0.1:8000/api/v1/stat/cust", {params: {"limit": usersNumber, "category": categoryId}})
+        .get("http://127.0.0.1:8000/api/v1/stat/cust",
+            {
+            params: {"limit": usersNumber, "category": categoryId},
+            headers: {"Authorization": 'JWT ' + authTokens?.access}
+           }
+        )
         .then(response => {
                 if (isEffected) {
                     setCustomList(response.data)}
@@ -45,7 +54,7 @@ const CustomStatDisplay= () => {
         </form>
 
         <div>
-            <StatDisplay title='Custom Table' content={customList}/>
+            <StatDisplay title=' ' content={customList}/>
         </div>
     </div>
     );

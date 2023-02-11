@@ -171,9 +171,10 @@ class ImageUploadAPIView(generics.CreateAPIView):
 
 
 class ChartAPIView(APIView):
-    serializer_class = CustomClickSerializer
+
     permission_classes = [AllowAny, ]
 
+    @extend_schema(summary="Получение данных для графика")
     @staticmethod
     def get(request, *args, **kwargs):
         if not request.query_params:
@@ -191,6 +192,3 @@ class ChartAPIView(APIView):
                 inst = ReturnChartDict(mid, qty, interval)
                 chart_data = inst.get_chart_dict()
                 return Response(chart_data)
-
-    def get_queryset(self):
-        return MealClick.objects.none()
