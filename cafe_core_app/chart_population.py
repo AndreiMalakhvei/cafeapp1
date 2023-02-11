@@ -3,6 +3,9 @@ from cafe_core_app.models import MealClick
 
 
 class ReturnChartDict:
+    """
+        ReturnClass returns data array for building a chart in JS Charts based on MealClick model
+    """
     def __init__(self, mid, qty, interval):
         self.mid = mid
         self.qty = qty
@@ -38,11 +41,16 @@ class ReturnChartDict:
             kstr = time_point.strftime(self.output_format)
             keys_list.append(kstr)
 
+        keys_list.reverse()
         final_dict = dict.fromkeys(keys_list, 0)
+        print(final_dict)
 
         for x in related_mealclicks:
             if x.click_date.strftime(self.output_format) in final_dict:
                 final_dict[x.click_date.strftime(self.output_format)] =\
                     final_dict.get(x.click_date.strftime(self.output_format), 0) + 1
 
-        return final_dict
+        # adjust output to JS Recharts:
+        recharts_array = [{"name": x, "val": y} for x,y in final_dict.items()]
+
+        return recharts_array

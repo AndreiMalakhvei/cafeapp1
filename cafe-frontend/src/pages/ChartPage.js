@@ -3,6 +3,18 @@ import axios from "axios";
 import ContextStorage from "../context/contextStorage";
 
 
+// import "./styles.css";
+// import React from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
+} from "recharts";
+
 const ChartPage= () => {
     const [chartData, setChartData] = useState([])
     const [meals, setMeals] = useState([])
@@ -43,10 +55,12 @@ const ChartPage= () => {
             )
             .then(response => {
                 setChartData(response.data)
-                console.log(response.data)
+
             });
 
     }, [selectedPeriod, selectedMeal, selectedQty]);
+
+
 
     return (<div>
         <div>
@@ -71,6 +85,35 @@ const ChartPage= () => {
                 <option key="9" value="wks"> Неделя</option>
             </select>
         </div>
+
+        <div>
+
+            <LineChart
+                width={800}
+                height={500}
+                data={chartData}
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5
+                }}
+            >
+                <CartesianGrid strokeDasharray="3 3"/>
+                <XAxis dataKey="name"/>
+                <YAxis/>
+                <Tooltip/>
+                <Legend/>
+                <Line
+                    type="monotone"
+                    dataKey="val"
+                    stroke="#8884d8"
+                    strokeDasharray="5 5"
+                />
+            </LineChart>
+
+        </div>
+
     </div>);
 }
 
