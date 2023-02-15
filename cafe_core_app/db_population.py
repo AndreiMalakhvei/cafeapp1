@@ -6,9 +6,8 @@ import random
 
 def generate_clicks():
     """
-    Данная фунция дополняет таблицу БД MealClick 1000-ю записями на основании
-    рандомных данных таблиц Meals и User и рандомной даты
-    :return:
+    The following func updates MealClick table with 1000 new records
+    Run with Shell only
     """
     users_qs = User.objects.prefetch_related().filter(is_staff=False)
     users_ids = list(users_qs.values_list('id', flat=True))

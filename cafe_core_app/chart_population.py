@@ -4,7 +4,7 @@ from cafe_core_app.models import MealClick
 
 class ReturnChartDict:
     """
-        ReturnClass returns data array for building a chart in JS Charts based on MealClick model
+        ReturnChartDict returns data array for building a chart in JS Charts based on MealClick model
     """
     def __init__(self, mid, qty, interval):
         self.mid = mid
