@@ -1,11 +1,14 @@
-import {Link} from "react-router-dom";
-
 
 const MealPhotos= (props) => {
 
 
 
-    return (<img src={props.meal.url} alt='' />);
+    return (
+
+<div className="carousel-item active">
+                        <img src={props.meal.url} alt='' />
+                    </div>
+    );
 }
 
 export default MealPhotos

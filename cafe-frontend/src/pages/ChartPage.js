@@ -2,9 +2,6 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import ContextStorage from "../context/contextStorage";
 
-
-// import "./styles.css";
-// import React from "react";
 import {
   LineChart,
   Line,

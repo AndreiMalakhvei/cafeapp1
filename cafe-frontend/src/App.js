@@ -12,7 +12,6 @@ import LogInPage from "./pages/LogInPage";
 import ChartPage from "./pages/ChartPage";
 
 
-
 function App() {
     return (
         <Layout>

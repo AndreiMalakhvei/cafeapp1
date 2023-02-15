@@ -6,45 +6,53 @@ import ContextStorage from "../../context/contextStorage";
 const Header = () => {
   let {user, logoutUser} = useContext(ContextStorage)
   return (
-    <header >
-      {user && <h2>Welcome to our Restaurant, {user.username}!</h2>}
-      <nav >
-        <ul>
-          <li>
-            <NavLink to='/home' >
-              HOME
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/menu' >
-              Меню
-            </NavLink>
-          </li>
 
+      <div className="container">
+        <header>
+          <div className="col-md-12">
+            <div className="row">
 
-          { user &&
-            <li>
-            <NavLink to='/stat'>
-              Статистика
-            </NavLink>
-          </li>}
+              <nav className="navbar navbar-expand-lg bg-body-tertiary">
+                <div className="container-fluid">
+                  <a className="navbar-brand" href="#">CAFE APPLICATION</a>
+                    <span className="navbar-toggler-icon"></span>
 
+                  <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li className="nav-item">
+                        <NavLink to='/home' className="nav-link" > HOME </NavLink>
+                      </li>
+                      <li className="nav-item">
+                        <NavLink to='/menu' className="nav-link" > Меню </NavLink>
+                      </li>
+                      {user &&
+                          <li className="nav-item">
+                        <NavLink to='/stat' className="nav-link" > Статистика </NavLink>
+                      </li>}
+                      {user && user.username === 'admin' &&
+                          <li className="nav-item">
+                        <NavLink to='/adminpage' className="nav-link" > Тайная комната Админа </NavLink>
+                      </li>}
 
-          { user?
-              (<li>
-            <Link to="/#" onClick={logoutUser} > Logout </Link>
-          </li>) :
-            (<li>
-            <NavLink to='/login'> Login </NavLink>
-            </li>)}
+                    </ul>
+                    <form className="d-flex" role="search">
+                      {user ?
+                        (<li className="nav-item">
+                          <Link to="/#" onClick={logoutUser} className="nav-link"> Logout </Link>
+                        </li>) :
+                        (<li className="nav-item">
+                          <NavLink to='/login' className="nav-link"> Login </NavLink>
+                       </li>)}
+                    </form>
 
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
 
-          { user && user.username === 'admin'&& <li><NavLink to='/adminpage'>Тайная комната Админа</NavLink></li>}
-
-
-        </ul>
-      </nav>
-    </header>
+        </header>
+      </div>
   );
 };
 

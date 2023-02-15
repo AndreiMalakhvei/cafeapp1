@@ -4,7 +4,7 @@ import React from "react";
 const AllMealsTable= (props) => {
     return (
         <div>
-        <table className="table" style={{width: "80%"}}>
+        <table className="table table-dark table-striped" style={{width: "80%"}}>
 
             <thead>
             <tr>

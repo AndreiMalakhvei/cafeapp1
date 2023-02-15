@@ -94,20 +94,6 @@ const FeaturePage = () => {
         }
     }
 
-//before UseMemo implementation
-    //   const filterByPriceHandler = (event) => {
-    //     event.preventDefault()
-    //     if (minPrice.current.value && maxPrice.current.value) {
-    //
-    //         const filtered = list.filter((record) => {
-    //             console.log("filtering...")
-    //             return record.price >= parseInt(minPrice.current.value) && record.price <= parseInt(maxPrice.current.value);
-    //         });
-    //         setList(filtered)
-    //     }
-    // }
-
-
     const setDefault = (event) => {
         maxPrice.current.value = ""
         minPrice.current.value = ""
@@ -125,36 +111,36 @@ const FeaturePage = () => {
         <SearchResultsWindow onClose={() => setShow(false)} show={show} list={filteredRecords}/>
 
         <div>
-            <label>SORT BY</label>
-            <select name="category" onChange={handleSort} ref={sortField}>
+            <label className="form-label">SORT BY</label>
+            <select name="category" onChange={handleSort} ref={sortField} className="form-select">
                 <option key="1" value="id"> id</option>
                 <option key="2" value="name"> name</option>
                 <option key="3" value="meal_category"> meal category</option>
                 <option key="4" value="price"> price</option>
                 <option key="5" value="size"> size</option>
             </select>
-            <select name="category" onChange={handleSort} ref={sortOrder}>
+            <select name="category" onChange={handleSort} ref={sortOrder} className="form-select">
                 <option key="5" value="ascending"> ASCENDING</option>
                 <option key="6" value="descending"> DESCENDING</option>
             </select>
         </div>
 
         <div>
-            <input type="text" id="text" ref={searchText}/>
-            <button type="button" onClick={handleSearch}>
-                Search
+            <input type="text" id="text" ref={searchText} className="form-control"/>
+            <button type="button" onClick={handleSearch} className="btn btn-primary">
+                SearchText
             </button>
         </div>
 
         <div>
             <form onSubmit={filterByPriceHandler}>
-                <label htmlFor="min">Цена от: </label>
-                <input type="number" id="min" ref={minPrice}/>
-                <label htmlFor="max">до: </label>
-                <input type="number" id="max" ref={maxPrice}/>
-                <button type="submit">FILTER BY PRICE</button>
+                <label htmlFor="min" className="form-label">Цена от: </label>
+                <input type="number" id="min" ref={minPrice} className="form-control"/>
+                <label htmlFor="max" className="form-label">до: </label>
+                <input type="number" id="max" ref={maxPrice} className="form-control"/>
+                <button type="submit" className="btn btn-primary">FILTER BY PRICE</button>
             </form>
-            <button onClick={setDefault}>DEFAULT</button>
+            <button onClick={setDefault} className="btn btn-danger">DEFAULT</button>
         </div>
 
 

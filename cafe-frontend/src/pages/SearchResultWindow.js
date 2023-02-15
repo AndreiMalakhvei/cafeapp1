@@ -7,7 +7,7 @@ const SearchResultsWindow= (props) => {
         {props.list.length
         ? <AllMealsTable list={props.list} />
         : <h4>NO RECORDS FOUND</h4>}
-       <button onClick={props.onClose}>CLOSE</button>
+       <button onClick={props.onClose} className="btn btn-danger">CLOSE</button >
     </div>);
 }
 

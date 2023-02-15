@@ -1,5 +1,4 @@
 
-
 const Record= (props) => {
     const record = props.recontent
 

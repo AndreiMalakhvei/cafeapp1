@@ -5,10 +5,7 @@ import CustomStatDisplay from "../components/CustomStatDisplay";
 import {Link} from "react-router-dom";
 import ContextStorage from "../context/contextStorage";
 
-
-
 const Stat= () => {
-
     let {authTokens} = useContext(ContextStorage)
 
     let isEffected = true
@@ -60,6 +57,5 @@ const Stat= () => {
         </div>
     </div>);
 }
-
 
 export default Stat

@@ -5,7 +5,7 @@ import ContextStorage from "../context/contextStorage";
 const SelectUse = (props) => {
     let {authTokens} = useContext(ContextStorage)
     const [categories, setCategories]= useState([]);
-    // const [categoryObj, setCategoryObj]= useState('');
+
 
     useEffect( ()=>{
         const getCategory = async ()=>{
@@ -26,13 +26,9 @@ const SelectUse = (props) => {
     props.onSelectedItem(getCategoryObj)
   }
 
-  // const handleInput = (event) => {
-  //       console.log(event.target.innerHtml)
-  // }
-
     return (<div>
         <label>Category</label>
-        <select name="category" onChange={handleCategory} >
+        <select name="category" onChange={handleCategory} className="form-select" >
             <option>--Select Category--</option>
             {
                 categories.map((cat) => (
@@ -45,5 +41,3 @@ const SelectUse = (props) => {
 }
 
 export default SelectUse
-
-

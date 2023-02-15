@@ -41,48 +41,54 @@ const AdminPage= () => {
         const selectedItemHandler = (val) => (catIndex = val)
 
 
-
     return (<div>
         <div>
-            <Link to='/features' >
-              Features
+            <Link to='/features'>
+                Features
             </Link>
         </div>
         <form onSubmit={submitFormHandler}>
-            <label htmlFor="name">Наименование</label>
-            <input
-                // value = {newMeal.value}
-                type="text"
-                id="name"
-                ref={inputName}
-            />
-            <label htmlFor="description">Описание</label>
-            <textarea
-                // value = {newMeal.description}
-                id="description"
-                ref={inputDescription}
-            />
-            <label htmlFor="price">Цена</label>
-            <input
-                // value = {newMeal.price}
-                type="text"
-                id="price"
-                ref={inputPrice}
-            />
-            <label htmlFor="size">Вес</label>
-            <input
-                // value = {newMeal.size}
-                type="number"
-                id="size"
-                ref={inputSize}
-            />
+            <div className="mb-3">
+                <label htmlFor="name" className="form-label">Наименование</label>
+                <input
+                    // value = {newMeal.value}
+                    type="text"
+                    id="name"
+                    ref={inputName}
+                    className="form-control"
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="description" className="form-label">Описание</label>
+                <textarea
+                    // value = {newMeal.description}
+                    id="description"
+                    ref={inputDescription}
+                    className="form-control"
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="price" className="form-label">Цена</label>
+                <input
+                    // value = {newMeal.price}
+                    type="text"
+                    id="price"
+                    ref={inputPrice}
+                    className="form-control"
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="size">Вес</label>
+                <input
+                    // value = {newMeal.size}
+                    type="number"
+                    id="size"
+                    ref={inputSize}
+                    className="form-control"
+                />
+            </div>
             <SelectUse onSelectedItem={selectedItemHandler}/>
-            <button type="submit" >Добавить блюдо</button>
-
-
-
-
-
+            <button type="submit" className="btn btn-primary">Добавить блюдо</button>
         </form>
     </div>);
 }
